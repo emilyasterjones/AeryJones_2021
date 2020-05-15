@@ -1,5 +1,6 @@
-function lme = calcLMM(vehdata,cnodata,logtransform)
+function [lme, vehcoeff, cnocoeff] = calcLMM(vehdata,cnodata,logtransform)
 
+bump = 0;
 if logtransform
     vehmins = cellfun(@min,vehdata);
     cnomins = cellfun(@min,cnodata);
@@ -32,17 +33,34 @@ x = x(2:end,:);
 tbl = table(x(:,1),x(:,2),x(:,3),'VariableNames',{'Measure','Animal','Treatment'});
 lme = fitlme(tbl,'Measure~Treatment+(Treatment|Animal)');
 lmefit = fitted(lme);
+vehcoeff = zeros(length(vehdata),1);
+cnocoeff = zeros(length(vehdata),1);
+for a = 1:length(vehdata)
+    vehcoeff(a) = unique(lmefit(tbl.Animal == a-1 & tbl.Treatment == 0));
+    cnocoeff(a) = unique(lmefit(tbl.Animal == a-1 & tbl.Treatment == 1));
+end
 
-%plot the residuals & manually inspect them; should be Gaussian & uncorrelated
-figure
-subplot(1,3,1)
-plotResiduals(lme)
-title('Res. distr.')
-subplot(1,3,2)
-qqplot(residuals(lme))
-title('Res. QQplot')
-subplot(1,3,3)
-scatter(tbl.Animal,residuals(lme))
-title('Res. related to animal')
+if logtransform
+    vehcoeff = exp(vehcoeff);
+    cnocoeff = exp(cnocoeff);
+    if datamin<=0
+        vehcoeff = vehcoeff - bump;
+        cnocoeff = cnocoeff - bump;
+    end 
+end
 
+
+% %plot the residuals & manually inspect them; should be Gaussian & uncorrelated
+% figure
+% subplot(1,3,1)
+% plotResiduals(lme)
+% title('Res. distr.')
+% subplot(1,3,2)
+% qqplot(residuals(lme))
+% title('Res. QQplot')
+% subplot(1,3,3)
+% scatter(tbl.Animal,residuals(lme))
+% title('Res. related to animal')
+
+% disp(lme)
 end

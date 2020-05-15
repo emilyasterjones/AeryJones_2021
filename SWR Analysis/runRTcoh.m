@@ -291,7 +291,7 @@ elseif figopt==4
     bands = [4 7];
     bandnames = {'slow gamma'};
     baseind = 1;  %first time bin
-    peakind = 5;%  %time bin immediately after thresh crossing
+    peakind = 3;%  %time bin immediately after thresh crossing
     
     animnames = [];
     animgeno = [];
