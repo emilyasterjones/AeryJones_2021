@@ -1,7 +1,7 @@
 # interneurons_modulate_drive
  MATLAB and IGOR scripts used to generate "Hippocampal GABAergic Interneurons Bidirectionally Modulate Signatures of Internal and External Drive"
  
-Preprint:
+Preprint: https://www.biorxiv.org/content/10.1101/2021.01.04.425303v1.full
 
 Requires the following libraries:
 * NeuroQuery: https://bitbucket.org/mkarlsso/neuroquery/src/master/
